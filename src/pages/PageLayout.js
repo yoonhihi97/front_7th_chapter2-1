@@ -1,4 +1,4 @@
-import { Footer, Header } from "../components/index";
+import { Footer, Header } from "../components/common/index";
 
 export const PageLayout = ({ children }) => {
   return `

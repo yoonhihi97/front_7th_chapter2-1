@@ -1,6 +1,7 @@
 import { PageLayout } from "./PageLayout";
 
-import { ProductList, SearchForm } from "../components/index.js";
+import { SearchForm } from "../components/index.js";
+import { ProductList } from "../components/product/index.js";
 
 export const HomePage = ({ filters, pagination, products, loading }) => {
   return PageLayout({
