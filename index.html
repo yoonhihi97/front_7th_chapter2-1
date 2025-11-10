@@ -16,6 +16,16 @@
         }
       }
     };
+
+    // GitHub Pages SPA 라우팅: 404.html에서 리다이렉트된 경로 복원
+    (function() {
+      const params = new URLSearchParams(window.location.search);
+      const redirect = params.get('redirect');
+      if (redirect) {
+        // redirect 파라미터를 제거하고 원래 경로로 이동
+        history.replaceState(null, '', redirect);
+      }
+    })();
   </script>
   <script type="module" crossorigin src="/front_7th_chapter2-1/assets/index-DJQt-9q6.js"></script>
   <link rel="stylesheet" crossorigin href="/front_7th_chapter2-1/assets/index-DVL8oARQ.css">
