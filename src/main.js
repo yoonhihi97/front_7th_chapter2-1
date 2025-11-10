@@ -1,5 +1,6 @@
 import { initRouter } from "./router/index.js";
 import { HomePage } from "./pages/HomePage.js";
+import { setupHomePageHandlers } from "./pages/HomePage.handlers.js";
 import { DetailPage } from "./pages/DetailPage.js";
 import { NotFoundPage } from "./pages/NotFoundPage.js";
 
@@ -12,7 +13,7 @@ const enableMocking = () =>
 
 // 라우트 설정
 const routes = [
-  { path: "/", component: HomePage },
+  { path: "/", component: HomePage, setupHandlers: setupHomePageHandlers },
   { path: "/product/:id", component: DetailPage },
   { path: "*", component: NotFoundPage },
 ];
