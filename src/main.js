@@ -1,6 +1,7 @@
-import { getProduct, getProducts } from "./api/productApi.js";
-import { DetailPage } from "./pages/DetailPage.js";
+import { initRouter } from "./router/index.js";
 import { HomePage } from "./pages/HomePage.js";
+import { DetailPage } from "./pages/DetailPage.js";
+import { NotFoundPage } from "./pages/NotFoundPage.js";
 
 const enableMocking = () =>
   import("./mocks/browser.js").then(({ worker }) =>
@@ -9,41 +10,19 @@ const enableMocking = () =>
     }),
   );
 
-const push = (path) => {
-  history.pushState({}, "", path);
-  render();
-};
-
-async function render() {
-  const $root = document.querySelector("#root");
-
-  if (location.pathname === "/") {
-    $root.innerHTML = HomePage({ loading: true });
-
-    const data = await getProducts();
-
-    $root.innerHTML = HomePage({ loading: false, ...data });
-
-    document.body.addEventListener("click", (event) => {
-      if (event.target.closest(".product-card")) {
-        const productId = event.target.closest(".product-card").dataset.productId;
-
-        push(`/products/${productId}`);
-      }
-    });
-  } else {
-    const productId = location.pathname.split("/").pop();
-    console.log(productId);
-    $root.innerHTML = DetailPage({ loading: true });
-    const data = await getProduct(productId);
-    $root.innerHTML = DetailPage({ product: data, loading: false });
-  }
-}
-
-window.addEventListener("popstate", render);
+// 라우트 설정
+const routes = [
+  { path: "/", component: HomePage },
+  { path: "/product/:id", component: DetailPage },
+  { path: "*", component: NotFoundPage },
+];
 
 async function main() {
-  render();
+  // 라우터 초기화
+  const router = initRouter(routes);
+
+  // 전역에서 사용할 수 있도록 window 객체에 추가
+  window.router = router;
 }
 
 // 애플리케이션 시작
