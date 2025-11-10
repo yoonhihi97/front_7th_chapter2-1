@@ -321,4 +321,4 @@
       <a href="/" data-link class="inline-block px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors">홈으로</a>
     </div>
     </main>
-  `}),F=()=>r(async()=>{let{worker:e}=await import(`./browser-CcyfQrG1.js`);return{worker:e}},[]).then(({worker:e})=>e.start({onUnhandledRequest:`bypass`})),I=[{path:`/`,component:D},{path:`/product/:id`,component:N},{path:`*`,component:P}];async function L(){let e=p(I);window.router=e}F().then(L);
+  `}),F=()=>r(async()=>{let{worker:e}=await import(`./browser-CcyfQrG1.js`);return{worker:e}},[]).then(({worker:e})=>e.start({serviceWorker:{url:`/front_7th_chapter2-1/mockServiceWorker.js`},onUnhandledRequest:`bypass`})),I=[{path:`/`,component:D},{path:`/product/:id`,component:N},{path:`*`,component:P}];async function L(){let e=p(I);window.router=e}F().then(L);
