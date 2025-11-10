@@ -2,6 +2,7 @@ import { initRouter } from "./router/index.js";
 import { HomePage } from "./pages/HomePage.js";
 import { setupHomePageHandlers } from "./handlers/homeHandlers.js";
 import { DetailPage } from "./pages/DetailPage.js";
+import { setupDetailPageHandlers } from "./handlers/detailHandlers.js";
 import { NotFoundPage } from "./pages/NotFoundPage.js";
 
 const enableMocking = () =>
@@ -15,9 +16,9 @@ const enableMocking = () =>
   );
 
 // 라우트 설정
-const routes = [
+export const routes = [
   { path: "/", component: HomePage, setupHandlers: setupHomePageHandlers },
-  { path: "/product/:id", component: DetailPage },
+  { path: "/product/:id", component: DetailPage, setupHandlers: setupDetailPageHandlers },
   { path: "*", component: NotFoundPage },
 ];
 
