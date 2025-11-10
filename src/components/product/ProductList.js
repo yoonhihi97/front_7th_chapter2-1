@@ -25,9 +25,10 @@ import { LoadingSpinner } from "./LoadingSpinner.js";
  * @param {Object} props
  * @param {boolean} props.loading - 로딩 상태
  * @param {Product[]} props.products - 상품 목록
+ * @param {number} props.total - 전체 상품 개수
  * @returns {string} 상품 목록 HTML
  */
-export const ProductList = ({ loading, products }) => {
+export const ProductList = ({ loading, products, total }) => {
   return `
     <div class="mb-6">
       <div>
@@ -44,9 +45,8 @@ export const ProductList = ({ loading, products }) => {
             : `
             <!-- 상품 개수 정보 -->
             <div class="mb-4 text-sm text-gray-600">
-              총 <span class="font-medium text-gray-900">${products.length}개</span>의 상품
+              총 <span class="font-medium text-gray-900">${total}개</span>의 상품
             </div>
-
             <!-- 상품 그리드 -->
             <div class="grid grid-cols-2 gap-4 mb-6" id="products-grid">
               ${products.map(ProductItem).join("")}
