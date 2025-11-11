@@ -15,7 +15,11 @@ import { StarRating } from "./StarRating.js";
  */
 export const ProductDetailInfo = (product) => {
   return `
-    <div class="bg-white rounded-lg shadow-sm mb-6">
+    <div class="bg-white rounded-lg shadow-sm mb-6"
+         data-product-id="${product.productId}"
+         data-title="${product.title}"
+         data-price="${product.lprice}"
+         data-image="${product.image}">
       <div class="p-4">
         <div class="aspect-square bg-gray-100 rounded-lg overflow-hidden mb-4">
           <img src="${product.image}" alt="${product.title}" class="w-full h-full object-cover product-detail-image">

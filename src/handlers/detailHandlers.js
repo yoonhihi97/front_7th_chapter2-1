@@ -62,11 +62,11 @@ export const setupDetailPageHandlers = () => {
 
     // 장바구니 담기 버튼
     if (target.id === "add-to-cart-btn" && e.type === "click") {
-      const productInfo = document.querySelector("[data-product-id]");
+      const productId = target.dataset.productId;
+      const productInfo = document.querySelector(`[data-product-id="${productId}"]`);
       const quantityInput = document.getElementById("quantity-input");
 
       if (productInfo && quantityInput) {
-        const productId = productInfo.dataset.productId;
         const title = productInfo.dataset.title;
         const price = Number(productInfo.dataset.price);
         const image = productInfo.dataset.image;
@@ -82,6 +82,8 @@ export const setupDetailPageHandlers = () => {
         addCartItem(product, quantity);
         toast.success("장바구니에 추가되었습니다");
         updateCartIconCount();
+      } else {
+        toast.error("상품 정보를 불러올 수 없습니다");
       }
       return;
     }
