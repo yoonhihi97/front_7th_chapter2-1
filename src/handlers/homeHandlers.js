@@ -58,6 +58,14 @@ const loadMoreProducts = async () => {
 
     // 다음 페이지 존재 여부 업데이트
     hasMore = data.pagination.hasNext;
+
+    // 더 이상 불러올 상품이 없으면 완료 메시지 표시
+    if (!hasMore) {
+      const endMessage = document.createElement("div");
+      endMessage.className = "text-center py-4 text-sm text-gray-500";
+      endMessage.textContent = "모든 상품을 확인했습니다";
+      productsGrid.parentElement.appendChild(endMessage);
+    }
   } catch (error) {
     console.error("Failed to load more products:", error);
     loadingDiv.remove();
