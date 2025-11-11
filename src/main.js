@@ -4,7 +4,8 @@ import { setupHomePageHandlers } from "./handlers/homeHandlers.js";
 import { DetailPage } from "./pages/DetailPage.js";
 import { setupDetailPageHandlers } from "./handlers/detailHandlers.js";
 import { NotFoundPage } from "./pages/NotFoundPage.js";
-import { CartModal, openCartModal, closeCartModal } from "./components/cart/index.js";
+import { openCartModal, closeCartModal } from "./components/cart/index.js";
+import { setupCartHandlers } from "./handlers/cartHandlers.js";
 
 const enableMocking = () =>
   import("./mocks/browser.js").then(({ worker }) =>
@@ -24,16 +25,11 @@ export const routes = [
 ];
 
 async function main() {
+  // 1. 라우터 초기화
   const router = initRouter(routes);
   window.router = router;
 
-  // 2. 장바구니 모달을 body에 추가 (한 번만)
-  const cartModalHTML = CartModal();
-  const tempDiv = document.createElement("div");
-  tempDiv.innerHTML = cartModalHTML;
-  document.body.appendChild(tempDiv.firstElementChild);
-
-  // 3. 전역 이벤트 리스너 등록 (이벤트 위임 사용)
+  // 2. 전역 이벤트 리스너 등록 (이벤트 위임 사용)
   document.addEventListener("click", (e) => {
     const target = e.target;
 
@@ -55,6 +51,8 @@ async function main() {
       return;
     }
   });
+
+  setupCartHandlers();
 }
 
 // 애플리케이션 시작
