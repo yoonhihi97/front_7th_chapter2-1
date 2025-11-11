@@ -3,6 +3,7 @@ import { routes } from "../main.js";
 import { addCartItem } from "../utils/cartStorage.js";
 import { updateCartIconCount } from "../components/common/Header.js";
 import { toast } from "../utils/toast.js";
+import { TOAST_MESSAGES } from "../constants.js";
 
 /**
  * DetailPage의 이벤트 핸들러를 등록하는 함수
@@ -80,10 +81,10 @@ export const setupDetailPageHandlers = () => {
         };
 
         addCartItem(product, quantity);
-        toast.success("장바구니에 추가되었습니다");
+        toast.success(TOAST_MESSAGES.CART_ADD_SUCCESS);
         updateCartIconCount();
       } else {
-        toast.error("상품 정보를 불러올 수 없습니다");
+        toast.error(TOAST_MESSAGES.PRODUCT_INFO_ERROR);
       }
       return;
     }

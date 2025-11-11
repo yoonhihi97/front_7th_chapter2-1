@@ -5,9 +5,10 @@ import { toast } from "../utils/toast.js";
 import { getProducts } from "../api/productApi.js";
 import { ProductItem } from "../components/product/ProductItem.js";
 import { LoadingSpinner } from "../components/product/LoadingSpinner.js";
+import { TOAST_MESSAGES, INFINITE_SCROLL_CONFIG, DEFAULT_VALUES } from "../constants.js";
 
 // 무한 스크롤 상태 관리
-let currentPage = 1;
+let currentPage = DEFAULT_VALUES.PAGE;
 let isLoading = false;
 let hasMore = true;
 let currentFilters = {};
@@ -105,8 +106,8 @@ const setupInfiniteScroll = () => {
     },
     {
       root: null,
-      rootMargin: "100px",
-      threshold: 0,
+      rootMargin: INFINITE_SCROLL_CONFIG.ROOT_MARGIN,
+      threshold: INFINITE_SCROLL_CONFIG.THRESHOLD,
     },
   );
 
@@ -127,11 +128,11 @@ export const setupHomePageHandlers = () => {
     category1: urlParams.get("category1") || "",
     category2: urlParams.get("category2") || "",
     sort: urlParams.get("sort") || "price_asc",
-    limit: parseInt(urlParams.get("limit")) || 20,
+    limit: parseInt(urlParams.get("limit")) || DEFAULT_VALUES.LIMIT,
   };
 
   // 무한 스크롤 상태 초기화 (새로고침 시 current는 무시하고 항상 1페이지부터 시작)
-  currentPage = 1;
+  currentPage = DEFAULT_VALUES.PAGE;
   isLoading = false;
   hasMore = true;
 
@@ -243,7 +244,7 @@ export const setupHomePageHandlers = () => {
       addCartItem(product, 1);
 
       // 5. 토스트 메시지
-      toast.success("장바구니에 추가되었습니다");
+      toast.success(TOAST_MESSAGES.CART_ADD_SUCCESS);
 
       // 6. 아이콘 개수 업데이트
       updateCartIconCount();

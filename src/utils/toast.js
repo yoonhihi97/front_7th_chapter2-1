@@ -1,6 +1,7 @@
 import { ToastSuccess } from "../components/toast/ToastSuccess.js";
 import { ToastInfo } from "../components/toast/ToastInfo.js";
 import { ToastError } from "../components/toast/ToastError.js";
+import { TOAST_CONFIG } from "../constants.js";
 
 /**
  * 토스트 컨테이너를 가져오거나 생성합니다
@@ -54,8 +55,8 @@ const showToast = (toastHTML) => {
     closeBtn.addEventListener("click", removeToast);
   }
 
-  // 3초 후 자동 제거
-  setTimeout(removeToast, 3000);
+  // 설정된 시간 후 자동 제거
+  setTimeout(removeToast, TOAST_CONFIG.DURATION);
 };
 
 export const toast = {

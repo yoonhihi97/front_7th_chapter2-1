@@ -10,6 +10,7 @@ import {
 import { updateCartIconCount } from "../components/common/Header.js";
 import { refreshCartModal } from "../components/cart/CartModal.js";
 import { toast } from "../utils/toast.js";
+import { TOAST_MESSAGES } from "../constants.js";
 
 /**
  * 장바구니 Footer(총액 및 버튼) 업데이트
@@ -156,7 +157,7 @@ export const setupCartHandlers = () => {
       removeItem(productId);
       refreshCartModal();
       updateCartIconCount();
-      toast.info("상품이 삭제되었습니다");
+      toast.info(TOAST_MESSAGES.PRODUCT_DELETE);
       return;
     }
 
@@ -168,7 +169,7 @@ export const setupCartHandlers = () => {
         removeSelectedItems();
         refreshCartModal();
         updateCartIconCount();
-        toast.info("선택된 상품들이 삭제되었습니다");
+        toast.info(TOAST_MESSAGES.SELECTED_PRODUCTS_DELETE);
       }
       return;
     }
@@ -178,7 +179,7 @@ export const setupCartHandlers = () => {
       clearCart();
       refreshCartModal();
       updateCartIconCount();
-      toast.info("장바구니가 비워졌습니다");
+      toast.info(TOAST_MESSAGES.CART_CLEAR);
       return;
     }
   });
