@@ -102,14 +102,14 @@ const clearCart = () => {
 };
 
 /**
- * 특정 아이템의 선택 상태 토글
+ * 특정 아이템의 선택 상태 변경
  */
-const toggleItemSelection = (productId) => {
+const toggleItemSelection = (productId, checked) => {
   const items = getCartItems();
   const existingItem = items.find((item) => item.id === productId);
 
   if (existingItem) {
-    existingItem.selected = !existingItem.selected;
+    existingItem.selected = checked;
   }
 
   // 모든 아이템이 선택되었는지 확인
