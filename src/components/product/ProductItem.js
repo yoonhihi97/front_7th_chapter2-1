@@ -9,10 +9,13 @@
  * @returns {string} 상품 아이템 HTML
  */
 export const ProductItem = ({ title, image, lprice, brand, productId }) => {
-  return `
+  return /* html */ `
     <div
       class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden product-card"
       data-product-id="${productId}"
+      data-title="${title}"
+      data-price="${lprice}"
+      data-image="${image}"
     >
       <div class="aspect-square bg-gray-100 overflow-hidden cursor-pointer product-image">
         <img
