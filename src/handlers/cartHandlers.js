@@ -1,0 +1,160 @@
+import {
+  toggleItemSelection,
+  toggleAllSelection,
+  updateItemQuantity,
+  removeItem,
+  removeSelectedItems,
+  clearCart,
+  getCartItems,
+} from "../utils/cartStorage.js";
+import { updateCartIconCount } from "../components/common/Header.js";
+import { refreshCartModal } from "../components/cart/CartModal.js";
+import { toast } from "../utils/toast.js";
+
+/**
+ * 장바구니 Footer(총액 및 버튼) 업데이트
+ * 체크박스 선택 시 총액과 "선택한 상품 삭제" 버튼 표시/숨김
+ */
+const updateCartFooter = () => {
+  const items = getCartItems();
+  const selectedItems = items.filter((item) => item.selected);
+  const totalPrice = selectedItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const selectedCount = selectedItems.length;
+
+  // 총액 업데이트
+  const totalPriceElement = document.querySelector(".cart-modal .text-xl.font-bold.text-blue-600");
+  if (totalPriceElement) {
+    totalPriceElement.textContent = `${Number(totalPrice).toLocaleString()}원`;
+  }
+
+  // "선택한 상품 삭제" 버튼 업데이트
+  const buttonContainer = document.querySelector(".cart-modal .sticky.bottom-0 .space-y-2");
+  if (buttonContainer) {
+    const existingRemoveBtn = document.getElementById("cart-modal-remove-selected-btn");
+
+    if (selectedCount > 0) {
+      // 선택된 상품이 있으면 버튼 표시/업데이트
+      if (existingRemoveBtn) {
+        existingRemoveBtn.textContent = `선택한 상품 삭제 (${selectedCount}개)`;
+      } else {
+        // 버튼이 없으면 새로 생성
+        const removeBtn = document.createElement("button");
+        removeBtn.id = "cart-modal-remove-selected-btn";
+        removeBtn.className =
+          "w-full bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 transition-colors text-sm";
+        removeBtn.textContent = `선택한 상품 삭제 (${selectedCount}개)`;
+        buttonContainer.insertBefore(removeBtn, buttonContainer.firstChild);
+      }
+    } else {
+      // 선택된 상품이 없으면 버튼 제거
+      if (existingRemoveBtn) {
+        existingRemoveBtn.remove();
+      }
+    }
+  }
+};
+
+/**
+ * 장바구니 모달 이벤트 핸들러 등록
+ */
+export const setupCartHandlers = () => {
+  document.addEventListener("click", (e) => {
+    const target = e.target;
+
+    // 개별 체크박스 클릭 - DOM만 업데이트 (성능 최적화)
+    if (target.classList.contains("cart-item-checkbox")) {
+      const productId = target.dataset.productId;
+      const isChecked = target.checked;
+      toggleItemSelection(productId, isChecked);
+
+      // 전체 선택 체크박스 상태 동기화
+      const items = getCartItems();
+      const allChecked = items.length > 0 && items.every((item) => item.selected);
+      const selectAllCheckbox = document.getElementById("cart-modal-select-all-checkbox");
+      if (selectAllCheckbox) {
+        selectAllCheckbox.checked = allChecked;
+      }
+
+      // 총액만 업데이트 (전체 재렌더링 안함)
+      updateCartFooter();
+      return;
+    }
+
+    // 전체 선택 체크박스 - DOM만 업데이트 (성능 최적화)
+    if (target.id === "cart-modal-select-all-checkbox") {
+      const isChecked = target.checked;
+      toggleAllSelection(isChecked);
+
+      // 모든 개별 체크박스 상태 동기화
+      const checkboxes = document.querySelectorAll(".cart-item-checkbox");
+      checkboxes.forEach((checkbox) => {
+        checkbox.checked = isChecked;
+      });
+
+      // 총액만 업데이트 (전체 재렌더링 안함)
+      updateCartFooter();
+      return;
+    }
+
+    // 수량 증가 - 재렌더링 필요 (수량 표시 변경)
+    if (target.closest(".quantity-increase-btn")) {
+      const btn = target.closest(".quantity-increase-btn");
+      const productId = btn.dataset.productId;
+      const items = getCartItems();
+      const item = items.find((item) => item.id === productId);
+      if (item) {
+        updateItemQuantity(productId, item.quantity + 1);
+        refreshCartModal();
+        updateCartIconCount();
+      }
+      return;
+    }
+
+    // 수량 감소 - 재렌더링 필요 (수량 표시 변경)
+    if (target.closest(".quantity-decrease-btn")) {
+      const btn = target.closest(".quantity-decrease-btn");
+      const productId = btn.dataset.productId;
+      const items = getCartItems();
+      const item = items.find((item) => item.id === productId);
+      if (item && item.quantity > 1) {
+        updateItemQuantity(productId, item.quantity - 1);
+        refreshCartModal();
+        updateCartIconCount();
+      }
+      return;
+    }
+
+    // 아이템 삭제 - 재렌더링 필요 (DOM 구조 변경)
+    if (target.closest(".cart-item-remove-btn")) {
+      const btn = target.closest(".cart-item-remove-btn");
+      const productId = btn.dataset.productId;
+      removeItem(productId);
+      refreshCartModal();
+      updateCartIconCount();
+      toast.info("상품이 삭제되었습니다");
+      return;
+    }
+
+    // 선택한 상품 삭제 - 재렌더링 필요 (DOM 구조 변경)
+    if (target.id === "cart-modal-remove-selected-btn") {
+      const items = getCartItems();
+      const selectedCount = items.filter((item) => item.selected).length;
+      if (selectedCount > 0) {
+        removeSelectedItems();
+        refreshCartModal();
+        updateCartIconCount();
+        toast.info("선택된 상품들이 삭제되었습니다");
+      }
+      return;
+    }
+
+    // 전체 비우기 - 재렌더링 필요 (DOM 구조 변경)
+    if (target.id === "cart-modal-clear-cart-btn") {
+      clearCart();
+      refreshCartModal();
+      updateCartIconCount();
+      toast.info("장바구니가 비워졌습니다");
+      return;
+    }
+  });
+};
