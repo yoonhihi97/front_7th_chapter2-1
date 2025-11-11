@@ -1,9 +1,9 @@
 import { navigateTo } from "../router/navigation.js";
 import { routes } from "../main.js";
-import { addCartItem } from "../utils/cartStorage.js";
 import { updateCartIconCount } from "../components/common/Header.js";
-import { toast } from "../utils/toast.js";
 import { TOAST_MESSAGES } from "../constants.js";
+import { toast } from "../utils/toast.js";
+import { extractProductData, addToCartWithFeedback } from "../utils/cartHelpers.js";
 
 /**
  * DetailPage의 이벤트 핸들러를 등록하는 함수
@@ -68,21 +68,10 @@ export const setupDetailPageHandlers = () => {
       const quantityInput = document.getElementById("quantity-input");
 
       if (productInfo && quantityInput) {
-        const title = productInfo.dataset.title;
-        const price = Number(productInfo.dataset.price);
-        const image = productInfo.dataset.image;
+        const productData = extractProductData(productInfo);
         const quantity = parseInt(quantityInput.value) || 1;
 
-        const product = {
-          id: productId,
-          title,
-          price,
-          image,
-        };
-
-        addCartItem(product, quantity);
-        toast.success(TOAST_MESSAGES.CART_ADD_SUCCESS);
-        updateCartIconCount();
+        addToCartWithFeedback(productData, quantity, updateCartIconCount);
       } else {
         toast.error(TOAST_MESSAGES.PRODUCT_INFO_ERROR);
       }

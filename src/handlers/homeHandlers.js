@@ -1,11 +1,10 @@
 import { updateQueryParams } from "../utils/queryParams.js";
-import { addCartItem } from "../utils/cartStorage.js";
 import { updateCartIconCount } from "../components/common/Header.js";
-import { toast } from "../utils/toast.js";
 import { getProducts } from "../api/productApi.js";
 import { ProductItem } from "../components/product/ProductItem.js";
 import { LoadingSpinner } from "../components/product/LoadingSpinner.js";
-import { TOAST_MESSAGES, INFINITE_SCROLL_CONFIG, DEFAULT_VALUES } from "../constants.js";
+import { INFINITE_SCROLL_CONFIG, DEFAULT_VALUES } from "../constants.js";
+import { extractProductData, addToCartWithFeedback } from "../utils/cartHelpers.js";
 
 // 무한 스크롤 상태 관리
 let currentPage = DEFAULT_VALUES.PAGE;
@@ -225,29 +224,10 @@ export const setupHomePageHandlers = () => {
     }
 
     if (target.classList.contains("add-to-cart-btn")) {
-      // 장바구니.. 담아야해요.. 아이템 정보 어디서 얻징.. 아이템에서 추출?
       const productCard = target.closest(".product-card");
+      const productData = extractProductData(productCard);
 
-      const productId = productCard.dataset.productId;
-      const title = productCard.dataset.title;
-      const price = Number(productCard.dataset.price);
-      const image = productCard.dataset.image;
-
-      const product = {
-        id: productId,
-        title: title,
-        price: price,
-        image: image,
-      };
-
-      // 4. 장바구니에 추가 (수량 1)
-      addCartItem(product, 1);
-
-      // 5. 토스트 메시지
-      toast.success(TOAST_MESSAGES.CART_ADD_SUCCESS);
-
-      // 6. 아이콘 개수 업데이트
-      updateCartIconCount();
+      addToCartWithFeedback(productData, 1, updateCartIconCount);
     }
   };
 
