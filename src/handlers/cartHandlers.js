@@ -13,18 +13,43 @@ import { toast } from "../utils/toast.js";
 
 /**
  * 장바구니 Footer(총액 및 버튼) 업데이트
- * 체크박스 선택 시 총액과 "선택한 상품 삭제" 버튼 표시/숨김
+ * 체크박스 선택 시 "선택한 상품" 정보와 "선택한 상품 삭제" 버튼 표시/숨김
  */
 const updateCartFooter = () => {
   const items = getCartItems();
   const selectedItems = items.filter((item) => item.selected);
-  const totalPrice = selectedItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const selectedPrice = selectedItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const selectedCount = selectedItems.length;
 
-  // 총액 업데이트
-  const totalPriceElement = document.querySelector(".cart-modal .text-xl.font-bold.text-blue-600");
-  if (totalPriceElement) {
-    totalPriceElement.textContent = `${Number(totalPrice).toLocaleString()}원`;
+  // "선택한 상품" 정보 업데이트/추가/제거
+  const footerContainer = document.querySelector(".cart-modal .sticky.bottom-0");
+  if (footerContainer) {
+    let selectedInfoElement = footerContainer.querySelector(".text-gray-600")?.parentElement;
+
+    if (selectedCount > 0) {
+      if (selectedInfoElement) {
+        // 기존 요소 업데이트
+        selectedInfoElement.querySelector(".text-gray-600").textContent = `선택한 상품 (${selectedCount}개)`;
+        selectedInfoElement.querySelector(".font-medium").textContent = `${Number(selectedPrice).toLocaleString()}원`;
+      } else {
+        // 새로 생성 (총 금액 div 앞에 삽입)
+        const totalPriceDiv = footerContainer.querySelector(".text-lg.font-bold");
+        if (totalPriceDiv?.parentElement) {
+          const selectedInfoDiv = document.createElement("div");
+          selectedInfoDiv.className = "flex justify-between items-center mb-3 text-sm";
+          selectedInfoDiv.innerHTML = `
+            <span class="text-gray-600">선택한 상품 (${selectedCount}개)</span>
+            <span class="font-medium">${Number(selectedPrice).toLocaleString()}원</span>
+          `;
+          footerContainer.insertBefore(selectedInfoDiv, totalPriceDiv.parentElement);
+        }
+      }
+    } else {
+      // 선택된 상품이 없으면 정보 제거
+      if (selectedInfoElement) {
+        selectedInfoElement.remove();
+      }
+    }
   }
 
   // "선택한 상품 삭제" 버튼 업데이트

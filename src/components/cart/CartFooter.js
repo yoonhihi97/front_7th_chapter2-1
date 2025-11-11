@@ -7,7 +7,8 @@ import { getCartItems } from "../../utils/cartStorage";
 export const CartFooter = () => {
   const items = getCartItems();
   const selectedItems = items.filter((item) => item.selected);
-  const totalPrice = selectedItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const totalPrice = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const selectedPrice = selectedItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const selectedCount = selectedItems.length;
 
   // 장바구니가 비어있으면 Footer 자체를 렌더링하지 않음
@@ -18,6 +19,14 @@ export const CartFooter = () => {
   return `
     <div class="sticky bottom-0 bg-white border-t border-gray-200 p-4">
       <!-- 선택된 아이템 정보 -->
+      ${
+        selectedCount > 0
+          ? `<div class="flex justify-between items-center mb-3 text-sm">
+            <span class="text-gray-600">선택한 상품 (${selectedCount}개)</span>
+            <span class="font-medium">${Number(selectedPrice).toLocaleString()}원</span>
+          </div>`
+          : ""
+      }
       <!-- 총 금액 -->
       <div class="flex justify-between items-center mb-4">
         <span class="text-lg font-bold text-gray-900">총 금액</span>
