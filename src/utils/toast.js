@@ -27,6 +27,11 @@ const getToastContainer = () => {
 const showToast = (toastHTML) => {
   const container = getToastContainer();
 
+  // 이미 토스트가 표시 중이면 무시
+  if (container.children.length > 0) {
+    return;
+  }
+
   // 임시 div를 만들어서 HTML 문자열을 DOM으로 변환
   const tempDiv = document.createElement("div");
   tempDiv.innerHTML = toastHTML;
