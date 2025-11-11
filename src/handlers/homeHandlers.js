@@ -122,10 +122,17 @@ export const setupHomePageHandlers = () => {
     limit: parseInt(urlParams.get("limit")) || 20,
   };
 
-  // 무한 스크롤 상태 초기화
-  currentPage = parseInt(urlParams.get("current")) || 1;
+  // 무한 스크롤 상태 초기화 (새로고침 시 current는 무시하고 항상 1페이지부터 시작)
+  currentPage = 1;
   isLoading = false;
   hasMore = true;
+
+  // URL에서 current 파라미터 제거 (새로고침 시 맨 위로)
+  if (urlParams.has("current")) {
+    urlParams.delete("current");
+    const newUrl = `${window.location.pathname}${urlParams.toString() ? "?" + urlParams.toString() : ""}`;
+    window.history.replaceState({}, "", newUrl);
+  }
 
   // 무한 스크롤 설정
   setupInfiniteScroll();
@@ -138,19 +145,19 @@ export const setupHomePageHandlers = () => {
     if (target.id === "search-input" && e.type === "keydown" && e.key === "Enter") {
       e.preventDefault();
       const searchValue = target.value.trim();
-      updateQueryParams({ search: searchValue || undefined, page: undefined });
+      updateQueryParams({ search: searchValue || undefined, page: undefined, current: undefined });
       return;
     }
 
     // 정렬 선택
     if (target.id === "sort-select" && e.type === "change") {
-      updateQueryParams({ sort: target.value, page: undefined });
+      updateQueryParams({ sort: target.value, page: undefined, current: undefined });
       return;
     }
 
     // 개수 선택
     if (target.id === "limit-select" && e.type === "change") {
-      updateQueryParams({ limit: target.value, page: undefined });
+      updateQueryParams({ limit: target.value, page: undefined, current: undefined });
       return;
     }
 
@@ -161,6 +168,7 @@ export const setupHomePageHandlers = () => {
         category1: category1 || undefined,
         category2: undefined,
         page: undefined,
+        current: undefined,
       });
       return;
     }
@@ -173,6 +181,7 @@ export const setupHomePageHandlers = () => {
         category1: category1,
         category2: category2 || undefined,
         page: undefined,
+        current: undefined,
       });
       return;
     }
@@ -184,6 +193,7 @@ export const setupHomePageHandlers = () => {
         category1: category1,
         category2: undefined,
         page: undefined,
+        current: undefined,
       });
       return;
     }
@@ -194,6 +204,7 @@ export const setupHomePageHandlers = () => {
         category1: undefined,
         category2: undefined,
         page: undefined,
+        current: undefined,
       });
       return;
     }
