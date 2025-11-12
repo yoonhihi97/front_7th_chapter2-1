@@ -1,13 +1,11 @@
 import { stringifyQuery } from "./queryParser";
-import { renderCurrentPage } from "./renderer";
 
 /**
  * 프로그래밍 방식으로 페이지 이동
- * @param {Array} routes - 라우트 설정 배열
  * @param {string} path - 이동할 경로 (예: "/", "/product/123")
  * @param {Object} query - 쿼리 파라미터 객체 (예: { search: "신발" })
  */
-export const navigateTo = (routes, path, query = {}) => {
+export const navigateTo = (path, query = {}) => {
   // 0. BASE_URL 추가 (production에서는 /front_7th_chapter2-1/)
   const basePath = import.meta.env.BASE_URL || "/";
   const pathWithBase = basePath === "/" ? path : basePath.slice(0, -1) + path;
@@ -23,7 +21,8 @@ export const navigateTo = (routes, path, query = {}) => {
   //    - 브라우저 히스토리에 추가
   history.pushState({}, "", fullPath);
 
-  // 4. renderCurrentPage(routes) 호출
-  //    - 변경된 URL에 맞는 페이지 렌더링
-  renderCurrentPage(routes);
+  // 4. popstate 이벤트 발생
+  //    - historyHandler가 감지하여 renderCurrentPage 호출
+  //    - 일관된 이벤트 기반 렌더링 흐름
+  window.dispatchEvent(new PopStateEvent("popstate"));
 };

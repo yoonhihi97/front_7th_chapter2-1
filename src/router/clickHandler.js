@@ -2,16 +2,15 @@ import { navigateTo } from "./navigation.js";
 
 /**
  * 클릭 이벤트를 감지해서 네비게이션 처리
- * @param {Array} routes - 라우트 설정 배열
  */
-export const setupClickHandler = (routes) => {
+export const setupClickHandler = () => {
   document.addEventListener("click", (e) => {
     // 1. data-link 속성이 있는 요소 찾기
     const link = e.target.closest("[data-link]");
     if (link) {
       e.preventDefault();
       const path = link.getAttribute("href");
-      navigateTo(routes, path);
+      navigateTo(path);
       return;
     }
 
@@ -24,7 +23,7 @@ export const setupClickHandler = (routes) => {
       }
 
       const productId = productCard.dataset.productId;
-      navigateTo(routes, `/product/${productId}`);
+      navigateTo(`/product/${productId}`);
       return;
     }
   });

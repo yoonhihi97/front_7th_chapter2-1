@@ -10,7 +10,7 @@ import { setupHistoryHandler } from "./historyHandler.js";
  */
 export const initRouter = (routes) => {
   // 1. 클릭 이벤트 핸들러 등록
-  setupClickHandler(routes);
+  setupClickHandler();
 
   // 2. 브라우저 히스토리 핸들러 등록 (뒤로/앞으로 가기)
   setupHistoryHandler(routes);
@@ -20,6 +20,6 @@ export const initRouter = (routes) => {
 
   // 4. 다른 곳에서 사용할 네비게이션 함수 반환
   return {
-    push: (path, query = {}) => navigateTo(routes, path, query),
+    push: (path, query = {}) => navigateTo(path, query),
   };
 };
