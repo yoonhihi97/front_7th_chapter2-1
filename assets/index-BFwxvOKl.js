@@ -354,7 +354,7 @@
           <img src="${e.image}" alt="${e.title}" class="w-full h-full object-cover product-detail-image">
         </div>
         <div>
-          <p class="text-sm text-gray-600 mb-1">${e.mallName}</p>
+          <p class="text-sm text-gray-600 mb-1">${e.brand}</p>
           <h1 class="text-xl font-bold text-gray-900 mb-3">${e.title}</h1>
           <div class="flex items-center mb-3">
             <div class="flex items-center">
