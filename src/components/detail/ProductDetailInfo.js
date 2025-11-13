@@ -6,7 +6,7 @@ import { QuantitySelector } from "./QuantitySelector.js";
  * @param {Object} product - 상품 정보
  * @param {string} product.image - 상품 이미지 URL
  * @param {string} product.title - 상품명
- * @param {string} product.mallName - 쇼핑몰명
+ * @param {string} product.brand - 브랜드명
  * @param {number} product.rating - 평점
  * @param {number} product.reviewCount - 리뷰 개수
  * @param {string} product.lprice - 최저가
@@ -26,7 +26,7 @@ export const ProductDetailInfo = (product) => {
           <img src="${product.image}" alt="${product.title}" class="w-full h-full object-cover product-detail-image">
         </div>
         <div>
-          <p class="text-sm text-gray-600 mb-1">${product.mallName}</p>
+          <p class="text-sm text-gray-600 mb-1">${product.brand}</p>
           <h1 class="text-xl font-bold text-gray-900 mb-3">${product.title}</h1>
           <div class="flex items-center mb-3">
             <div class="flex items-center">
